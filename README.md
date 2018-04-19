@@ -24,7 +24,7 @@ Your lab directory must include
 * **src/** -- containing the front end code
 * **src/main.js** -- containing the entire app
 * **src/style** -- containing your sass
-* **src/style/main.scss** -- containing the front end code
+* **src/style/main.css** -- containing the front end code
  
 #### Feature Tasks 
 Create the following components and structure them according to the following diagram.  

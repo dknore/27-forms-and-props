@@ -19254,34 +19254,37 @@ var SearchResultList = function (_React$Component) {
   function SearchResultList(props) {
     _classCallCheck(this, SearchResultList);
 
-    var _this = _possibleConstructorReturn(this, (SearchResultList.__proto__ || Object.getPrototypeOf(SearchResultList)).call(this, props));
-
-    _this.state = {
-      userInput: ''
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (SearchResultList.__proto__ || Object.getPrototypeOf(SearchResultList)).call(this, props));
   }
 
   _createClass(SearchResultList, [{
+    key: 'movieList',
+    value: function movieList() {
+      return this.props.results.map(function (result, i) {
+        return _react2.default.createElement(
+          'li',
+          { key: i },
+          result
+        );
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'ul',
+        'div',
         null,
         _react2.default.createElement(
-          'li',
+          'p',
           null,
-          'Movie 1'
+          'Found ',
+          this.props.results.length,
+          ' Movies'
         ),
         _react2.default.createElement(
-          'li',
+          'ul',
           null,
-          'Movie 2'
-        ),
-        _react2.default.createElement(
-          'li',
-          null,
-          'Movie 3'
+          this.movieList()
         )
       );
     }

@@ -3,17 +3,21 @@ import React from 'react';
 class SearchResultList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userInput: ''
-    }
+  }
+
+  movieList() {
+    return this.props.results.map((result, i) => {
+      return <li key={i}>{result}</li>
+    })
   }
 
   render() {
-    return <ul>
-      <li>Movie 1</li>
-      <li>Movie 2</li>
-      <li>Movie 3</li>
+    return <div>
+      <p>Found {this.props.results.length} Movies</p>
+      <ul>
+        {this.movieList()}
       </ul>
+    </div>
   }
 }
 

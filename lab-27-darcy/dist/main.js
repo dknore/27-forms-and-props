@@ -19127,6 +19127,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// import './style/main.scss';
+
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
 
@@ -19137,12 +19139,34 @@ var App = function (_React$Component) {
 
     _this.state = {
       title: 'Reddit Search Engine',
-      results: ["Kill Bill vol I", "Kill Bill vol II", "Point of No Return"]
+      results: []
     };
+    _this.performSearch = _this.performSearch.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
+    key: 'performSearch',
+    value: function performSearch(query) {
+      var _this2 = this;
+
+      var url = 'https://www.reddit.com/r/' + query + '.json?limit=' + query.limit;
+
+      fetch(url).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        var content = json.data.children;
+        _this2.setState({ results: content });
+        console.log('content.length= ', content.length);
+      });
+
+      // if (query === 'ttt') {
+      //   this.setState({ results: ["Kill Bill vol I", "Kill Bill vol II"] });
+      // } else {
+      //   this.setState({ results: [] });
+      // }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -19153,7 +19177,7 @@ var App = function (_React$Component) {
           null,
           this.state.title
         ),
-        _react2.default.createElement(_searchForm2.default, null),
+        _react2.default.createElement(_searchForm2.default, { search: this.performSearch }),
         _react2.default.createElement(_searchResultList2.default, { results: this.state.results })
       );
     }
@@ -19162,7 +19186,8 @@ var App = function (_React$Component) {
   return App;
 }(_react2.default.Component);
 
-var root = document.getElementById('root');
+var root = document.createElement('div');
+document.body.appendChild(root);
 _reactDom2.default.render(_react2.default.createElement(App, null), root);
 
 /***/ }),
@@ -19197,21 +19222,44 @@ var SearchForm = function (_React$Component) {
   function SearchForm(props) {
     _classCallCheck(this, SearchForm);
 
-    return _possibleConstructorReturn(this, (SearchForm.__proto__ || Object.getPrototypeOf(SearchForm)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (SearchForm.__proto__ || Object.getPrototypeOf(SearchForm)).call(this, props));
+
+    _this.state = {
+      userInput: '',
+      limit: 10
+    };
+    _this.updateInput = _this.updateInput.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
   }
 
   _createClass(SearchForm, [{
-    key: "render",
+    key: 'updateInput',
+    value: function updateInput(event) {
+      var input = event.target.value;
+      this.setState({ userInput: input });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      console.log('SearchForm input= ', this.state.userInput);
+      this.props.search(this.state.userInput);
+    }
+  }, {
+    key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        "form",
-        null,
-        this.props.title,
-        _react2.default.createElement("input", { type: "text", placeholder: "Search Movies" }),
+        'form',
+        { onSubmit: this.handleSubmit },
+        _react2.default.createElement('input', { type: 'text',
+          onChange: this.updateInput,
+          value: this.state.userInput,
+          placeholder: 'Search Movies' }),
         _react2.default.createElement(
-          "button",
+          'button',
           null,
-          "Search"
+          'Search'
         )
       );
     }
@@ -19264,7 +19312,17 @@ var SearchResultList = function (_React$Component) {
         return _react2.default.createElement(
           'li',
           { key: i },
-          result
+          _react2.default.createElement(
+            'a',
+            { href: result.data.url },
+            result.data.title,
+            _react2.default.createElement(
+              'p',
+              null,
+              result.data.ups,
+              ' Up\'s'
+            )
+          )
         );
       });
     }

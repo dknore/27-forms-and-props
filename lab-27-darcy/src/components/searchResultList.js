@@ -7,7 +7,7 @@ class SearchResultList extends React.Component {
 
   movieList() {
     return this.props.results.map((result, i) => {
-      return <li key={i}>{result}</li>
+      return <li key={i}><a href={result.data.url}>{result.data.title}<p>{result.data.ups} Up's</p></a></li>
     })
   }
 
@@ -20,5 +20,6 @@ class SearchResultList extends React.Component {
     </div>
   }
 }
+
 
 module.exports = SearchResultList;
